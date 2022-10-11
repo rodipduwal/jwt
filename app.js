@@ -2,6 +2,8 @@ require("dotenv").config();
 require("./config/database").connect();
 const express = require("express");
 const bodyParser = require('body-parser')
+const bcrypt = require('bcrypt');
+// const jwt = require('jwt');
 
 
 const app = express();
@@ -14,7 +16,7 @@ const User = require("./model/user");
 
 // Register
 // app.post("/register", (req, res) => {
-app.get("/register", async (req, res) => {
+app.post("/register", async (req, res) => {
 
   // Our register logic starts here
   try {
@@ -100,7 +102,12 @@ app.post("/login", async (req, res) => {
   } catch (err) {
     console.log(err);
   }
-  // Our register logic ends here
+ 
+  const auth = require("./middleware/auth");
+
+app.post("/welcome", auth, (req, res) => {
+  res.status(200).send("Welcome 🙌 ");
+});
 });
 
 
